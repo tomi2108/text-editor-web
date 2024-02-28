@@ -1,5 +1,5 @@
 /* eslint-disable no-control-regex */
-import { TreeNode, iterateTree } from "@/utils/tree";
+import { TreeNode, findNode, iterateTree } from "@/utils/tree";
 import { useState } from "react";
 import Line from "./Line";
 
@@ -10,35 +10,26 @@ type Cursor = {
 
 const Editor = () => {
   const [stringTree, setStringTree] = useState<TreeNode>({
-    length: 5,
+    length: 14,
     left: {
-      left: {
-        left: null,
-        right: null,
-        length: 2,
-        string: "22222"
-      },
-      right: {
-        left: null,
-        right: null,
-        length: 2,
-        string: "\n33333333"
-      },
-      length: 2
+      length: 5,
+      left: "22222",
+      right: "\n33333333"
     },
-    right: {
-      left: null,
-      right: null,
-      length: 2
-    }
+    right: null
   });
   const [cursor, setCursor] = useState<Cursor>({
     column: 0,
-    row: 0
+    row: 14
   });
+
+  const nodeWithCursor = findNode(stringTree, cursor.row);
+
+  console.log(nodeWithCursor);
+
   let fileString = "";
   iterateTree(stringTree, (node) => {
-    fileString = fileString.concat(node.string ?? "");
+    if (typeof node === "string") fileString = fileString.concat(node);
   });
   const lines = fileString.split("\n");
   return (
